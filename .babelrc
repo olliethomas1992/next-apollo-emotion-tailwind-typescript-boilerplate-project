@@ -1,0 +1,40 @@
+{
+  "presets": [
+    [
+      // When creating a custom babel config, use the next/babel preset.
+      // next/babel includes:
+      // -   preset-env
+      // -   preset-react
+      // -   preset-typescript
+      // -   plugin-proposal-class-properties
+      // -   plugin-proposal-object-rest-spread
+      // -   plugin-transform-runtime
+      // -   styled-jsx
+      // Pass any settings to these below.
+      "next/babel",
+      {
+        "preset-env": {},
+        "transform-runtime": {},
+        "styled-jsx": {},
+        "class-properties": {}
+      }
+    ]
+  ],
+  "env": {
+    "development": {
+      "presets": [
+        // @emotion/babel-preset-css-prop includes the @emotion babel plugin.
+        // @emotion babel plugin should be removed from .babelrc
+        // See https://emotion.sh/docs/@emotion/babel-preset-css-prop#usage for more details.
+        // Ensure that @emotion/babel-preset-css-prop is inserted after them in your babel config.
+        ["@emotion/babel-preset-css-prop", { "sourceMap": true }]
+      ]
+    },
+    "production": {
+      "presets": [["@emotion/babel-preset-css-prop"]]
+    }
+  },
+  // Allows the use of babel macros.
+  // Used by babel-plugin-tailwind-components package.
+  "plugins": ["macros"]
+}

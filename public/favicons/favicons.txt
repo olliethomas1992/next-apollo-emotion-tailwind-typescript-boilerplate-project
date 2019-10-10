@@ -1,0 +1,10 @@
+/**
+
+	Use: http://www.favicomatic.com/
+	This will get you most of what is needed.
+	Can't configure the background for the iphone app screen logo
+	Use: https://realfavicongenerator.net/
+	For iphone icon.
+
+    
+*/

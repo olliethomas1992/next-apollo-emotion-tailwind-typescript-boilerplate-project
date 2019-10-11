@@ -25,15 +25,10 @@ const onFormSuccess = ({
     toast.success('✅ Success!');
 };
 
-const onFormFail = ({
-    resetForm,
-    setSubmitting,
-    errorMessage = 'Error!'
-}: OnFormFailProps): void => {
+const onFormFail = ({ resetForm, setSubmitting }: OnFormFailProps): void => {
     Nprogress.done();
     setSubmitting(false);
     resetForm();
-    toast.error(`👎🏻 ${errorMessage}`);
 };
 
 export { onFormSuccess, onFormFail };

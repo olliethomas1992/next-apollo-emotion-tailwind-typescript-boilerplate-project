@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { onFormFail, onFormSuccess } from '../components/forms/actions';
 import LoginForm from '../components/forms/LoginForm';
 import { FormCard } from '../components/styles/FormCard';
+import { errorHandler } from '../helpers/errorHandler';
 import { validateEmail, validatePassword } from '../helpers/validation';
 
 const LOGIN_MUTATION = gql`
@@ -63,19 +64,17 @@ const Login = (): JSX.Element => {
                                 });
                             }
                         })
-                        .catch(({ graphQLErrors }): void => {
-                            let errorMessage = '';
-                            if (graphQLErrors[0].message.statusCode == 401) {
-                                errorMessage = 'Invalid username or password';
-                            } else {
-                                console.log(
-                                    JSON.stringify(graphQLErrors, null, 2)
-                                );
-                            }
+                        .catch((errors): void => {
+                            errorHandler({
+                                errors,
+                                expectedError: {
+                                    code: 401,
+                                    message: 'Invalid Email or Password'
+                                }
+                            });
                             onFormFail({
                                 resetForm,
-                                setSubmitting,
-                                errorMessage
+                                setSubmitting
                             });
                         });
                 }}

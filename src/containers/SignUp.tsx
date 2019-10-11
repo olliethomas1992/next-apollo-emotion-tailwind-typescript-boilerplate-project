@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { onFormFail, onFormSuccess } from '../components/forms/actions';
 import SignUpForm from '../components/forms/SignUpForm';
 import { FormCard } from '../components/styles/FormCard';
+import { errorHandler } from '../helpers/errorHandler';
 import {
     validateEmail,
     validateName,
@@ -47,19 +48,16 @@ const SignUp = (): JSX.Element => {
                         .then((): void =>
                             onFormSuccess({ resetForm, setSubmitting })
                         )
-                        .catch(({ graphQLErrors }): void => {
-                            let errorMessage = '';
-                            if (graphQLErrors[0].message.statusCode == 409) {
-                                errorMessage = graphQLErrors[0].message.message;
-                            } else {
-                                console.log(
-                                    JSON.stringify(graphQLErrors, null, 2)
-                                );
-                            }
+                        .catch((errors): void => {
+                            errorHandler({
+                                errors,
+                                expectedError: {
+                                    code: 409
+                                }
+                            });
                             onFormFail({
                                 resetForm,
-                                setSubmitting,
-                                errorMessage
+                                setSubmitting
                             });
                         });
                 }}

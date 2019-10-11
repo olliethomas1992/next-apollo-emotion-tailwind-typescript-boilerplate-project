@@ -1,17 +1,26 @@
 import { toast } from 'react-toastify';
 
-const handleGraphQlErrors = (graphQlErrors, expectedError): any => {
-    graphQlErrors.forEach(graphQlError => {
+const handleGraphQlErrors = (graphQlErrors, expectedError, flag): any => {
+    const errors = graphQlErrors.map(graphQlError => {
         const res = graphQlError.extensions.exception.response;
-        if (res.statusCode === expectedError.code) {
+        if (flag && res.statusCode === expectedError.code) {
             if (expectedError.message) {
                 toast.error(`👎🏻 ${expectedError.message}`);
             } else if (res.message) {
                 toast.error(`👎🏻 ${res.message}`);
             }
         }
+
         console.log(JSON.stringify(graphQlError, null, 2));
+
+        return {
+            statusCode: res.statusCode,
+            error: res.error,
+            message: res.message
+        };
     });
+
+    return errors;
 };
 
 interface ErrorHandler {
@@ -20,11 +29,14 @@ interface ErrorHandler {
         code: number;
         message?: string;
     };
+    flag: boolean;
 }
 
-const errorHandler = ({ errors, expectedError }: ErrorHandler): any => {
+const errorHandler = ({ errors, expectedError, flag = true }: any): any => {
+    console.log(errors);
     const { graphQLErrors } = errors;
-    if (graphQLErrors) return handleGraphQlErrors(graphQLErrors, expectedError);
+    if (graphQLErrors)
+        return handleGraphQlErrors(graphQLErrors, expectedError, flag);
 };
 
 export { errorHandler };

@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/react-hooks';
 import styled from '@emotion/styled';
 import gql from 'graphql-tag';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import tw from 'tailwind.macro';
 
+import PageError from '../components/errors/PageError';
 import Loader from '../components/Loader';
+import { errorHandler } from '../helpers/errorHandler';
 
 const USERS_QUERY = gql`
     query USERS_QUERY {
@@ -29,7 +31,13 @@ const Users = (): JSX.Element => {
 
     if (loading) return <Loader />;
 
-    if (error) return <div>Error...</div>;
+    if (error) {
+        const errors = errorHandler({ errors: error, flag: false });
+        if (errors[0].statusCode === 401) {
+            return <Loader />;
+        }
+        return <PageError />;
+    }
 
     const { users } = data;
     return (
